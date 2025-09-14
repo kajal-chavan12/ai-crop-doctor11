@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Crop Doctor</title>
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI', sans-serif; background:#f0fdf4; }
+
+/* Navbar */
+nav {
+  background:#16a34a; color:white;
+  padding:10px 15px; display:flex;
+  justify-content:space-between; align-items:center;
+  position:sticky; top:0; z-index:100;
+}
+nav h1 { cursor:pointer; font-size:1.2rem; white-space:nowrap; }
+nav .menu { display:flex; gap:5px; flex-wrap:nowrap; }
+nav .menu button {
+  flex-shrink:0; padding:8px 12px; border:none;
+  border-radius:8px; cursor:pointer; font-weight:bold;
+  white-space:nowrap;
+}
+nav .menu button:hover { background:#d1fae5; color:#16a34a; }
+
+/* Hamburger for mobile */
+nav .hamburger {
+  display:none; flex-direction:column; cursor:pointer;
+}
+nav .hamburger span {
+  width:25px; height:3px; background:white; margin:4px 0;
+  transition:0.3s;
+}
+
+/* Sections */
+section, .card { display:none; padding:40px 20px; text-align:center; }
+
+.hero {
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  min-height:90vh;
+  background:linear-gradient(-45deg,#84cc16,#22c55e,#16a34a,#4ade80);
+  background-size:400% 400%; animation:gradientBG 15s ease infinite;
+  color:white;
+  padding-bottom:20px;
+}
+@keyframes gradientBG {
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+.hero h1 { font-size:3rem; margin-bottom:20px; }
+.hero p { font-size:1.3rem; margin-bottom:30px; }
+.hero button { margin:5px; padding:12px 25px; font-size:1rem; border:none; border-radius:10px; cursor:pointer; font-weight:bold; }
+.hero button:hover { background:#d1fae5; color:#16a34a; }
+
+.features { 
+  display:flex; 
+  flex-wrap:wrap; 
+  justify-content:center; 
+  margin-top:20px; 
+  margin-bottom:40px; /* space before footer */
+}
+.feature-card {
+  background:white; padding:20px; margin:10px;
+  border-radius:15px; flex:1 1 250px; max-width:300px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.15);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+.feature-card h3 { color:#16a34a; margin-bottom:10px; }
+.feature-card p { color:#065f46; }
+
+.card {
+  background:white; 
+  margin:30px auto; 
+  max-width:400px;
+  padding:25px; 
+  border-radius:15px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.15);
+  margin-bottom:40px; /* space before footer */
+}
+input {
+  width:90%; padding:12px; margin:10px 0;
+  border-radius:8px; border:1px solid #ccc;
+}
+button.action {
+  padding:12px 25px; border:none; border-radius:10px;
+  cursor:pointer; font-weight:bold; background:#16a34a; color:white;
+}
+button.action:hover { background:#15803d; }
+
+#result {
+  margin-top:20px; padding:15px;
+  border:1px solid #a7f3d0; border-radius:8px; background:#f0fdf4;
+}
+
+footer {
+  background:#065f46; color:white; text-align:center; padding:20px; 
+  clear:both;
+  width:100%;
+}
+
+/* Responsive */
+@media(max-width:768px){
+  nav h1{ font-size:1rem; }
+  nav .menu button{ padding:6px 10px; font-size:0.85rem; }
+  .hero h1{font-size:2rem;}
+  .hero p{font-size:1rem;}
+  .hero button{padding:10px 20px; font-size:0.9rem;}
+  input{width:95%;}
+  .card{width:95%; margin:20px auto;}
+  .features{flex-direction:column; align-items:center;}
+  .feature-card{width:90%; margin:10px 0;}
+}
+
+@media(max-width:500px){
+  nav .menu { display:none; flex-direction:column; align-items:flex-start; width:100%; background:#16a34a; padding:10px 0; }
+  nav .menu.active { display:flex; }
+  nav .menu button { width:100%; text-align:left; padding:10px 15px; }
+  nav .hamburger { display:flex; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+  <h1 onclick="showPage('home')">🌱 AI Crop Doctor</h1>
+  <div class="menu" id="menu">
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('login')">Login</button>
+    <button onclick="showPage('doctor')">Doctor</button>
+  </div>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Home Section -->
+<section id="home" class="hero">
+  <h1>🌱 AI Crop Doctor</h1>
+  <p>Detect crop diseases instantly and get expert guidance.</p>
+  <button onclick="showPage('login')">Login</button>
+  <button onclick="showPage('doctor')">Analyze Crop</button>
+
+  <div class="features">
+    <div class="feature-card">
+      <h3>🌿 Disease Detection</h3>
+      <p>Upload crop images and AI detects diseases instantly.</p>
+    </div>
+    <div class="feature-card">
+      <h3>💧 Crop Advice</h3>
+      <p>Receive guidance on watering, fertilizers, and preventive care.</p>
+    </div>
+    <div class="feature-card">
+      <h3>📊 Analytics</h3>
+      <p>Track crop health and get insights for better productivity.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Login Section -->
+<div class="card" id="login">
+  <h2>Login</h2>
+  <input id="email" type="email" placeholder="Email"><br>
+  <input id="password" type="password" placeholder="Password"><br>
+  <button class="action" onclick="login()">Login</button>
+</div>
+
+<!-- Doctor Section -->
+<div class="card" id="doctor">
+  <h2>AI Crop Doctor</h2>
+  <input type="file" id="file"><br>
+  <button class="action" onclick="analyze()">Analyze</button>
+  <div id="result"></div>
+</div>
+
+<!-- Footer -->
+<footer>&copy; 2025 AI Crop Doctor | Demo</footer>
+
+<script>
+let loggedIn = false;
+const diseases = [
+  { name:"Leaf Blight", advice:"Use fungicide spray and avoid excess watering." },
+  { name:"Powdery Mildew", advice:"Remove infected leaves and apply sulfur-based fungicide." },
+  { name:"Rust", advice:"Spray neem oil and improve air circulation." },
+  { name:"Healthy", advice:"No disease detected. Keep monitoring." }
+];
+
+function showPage(page){
+  document.getElementById('home').style.display='none';
+  document.getElementById('login').style.display='none';
+  document.getElementById('doctor').style.display='none';
+
+  if(page==='doctor' && !loggedIn){
+    alert('Please login first');
+    page='login';
+  }
+  document.getElementById(page).style.display='block';
+  if(window.innerWidth <= 500) toggleMenu(false); // close menu on mobile
+}
+
+function login(){
+  const email=document.getElementById('email').value;
+  const password=document.getElementById('password').value;
+  if(email && password){
+    loggedIn=true;
+    alert("Login successful!");
+    showPage('doctor');
+  } else {
+    alert("Enter email and password");
+  }
+}
+
+function analyze(){
+  const file=document.getElementById('file').files[0];
+  if(!file) return alert("Upload an image first");
+
+  let index=file.name.length % diseases.length;
+  const result=diseases[index];
+
+  document.getElementById('result').innerHTML=
+    `<strong>Disease:</strong> ${result.name}<br>
+     <strong>Advice:</strong> ${result.advice}`;
+}
+
+function toggleMenu(force){
+  const menu=document.getElementById('menu');
+  if(force===false) menu.classList.remove('active');
+  else menu.classList.toggle('active');
+}
+
+// Show home first
+showPage('home');
+</script>
+
+</body>
+</html>
